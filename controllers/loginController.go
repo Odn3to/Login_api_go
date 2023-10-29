@@ -17,9 +17,8 @@ import (
 // @ID logar
 // @Accept  json
 // @Produce  json
-// @Param   username     body    string     true        "Nome do usuário"
-// @Param   password     body    string     true        "Senha"
-// @Success 200 {string} string	"ok"
+// @Param   userCredentials     body    User.Login     true        "Credenciais do usuário"
+// @Success 200 {object} jwt_func.Verfica
 // @Router /login/token [post]
 func Logar(c *fiber.Ctx) error {
 	user := new(User.Login)
@@ -68,7 +67,7 @@ func Logar(c *fiber.Ctx) error {
 // @Accept  json
 // @Produce  json
 // @Param   token     body    string     true        "Token"
-// @Success 200 {string} string	"ValidToken: true"
+// @Success 200 {object} jwt_func.RetornoVerificar
 // @Router /login/validador [post]
 func VerificaJwt(c *fiber.Ctx) error {
 	request := new(jwt_func.Verfica)
@@ -95,11 +94,10 @@ func VerificaJwt(c *fiber.Ctx) error {
 // @ID createUser
 // @Accept  json
 // @Produce  json
-// @Param   username     body    string     true        "Nome do usuário"
-// @Param   password     body    string     true        "Senha"
-// @Success 200 {string} string	"user"
+// @Param   User.Login     body    User.Login     true        "Credenciais do usuário"
+// @Success 200 {object} User.Login
 // @Router /login/create [post]
-func Create(c *fiber.Ctx) error{
+func Create(c *fiber.Ctx) error {
 	user := new(models.User)
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -115,7 +113,7 @@ func Create(c *fiber.Ctx) error{
 	    })
 	}
 	
-	// Convertir o slice de bytes para string
+	// Convert byte slice to string
 	user.Password = string(hashedPasswordBytes)
 
 	db := database.GetDataBase()
@@ -137,11 +135,10 @@ func Create(c *fiber.Ctx) error{
 // @ID deleteUser
 // @Accept  json
 // @Produce  json
-// @Param   username     body    string     true        "Nome do usuário"
-// @Param   password     body    string     true        "Senha"
-// @Success 200 {string} string	"User Deletado com Sucesso!"
+// @Param   User.Login     body    User.Login     true        "Credenciais do usuário"
+// @Success 200 {object} User.Message
 // @Router /login/delete [post]
-func Delete(c *fiber.Ctx) error{
+func Delete(c *fiber.Ctx) error {
 	user := new(models.User)
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -151,7 +148,7 @@ func Delete(c *fiber.Ctx) error{
 
 	db := database.GetDataBase()
 
-	// Recuperar o usuário com base no nome de usuário
+	// Retrieve user based on username
 	var existingUser models.User
 	if err := db.Where("username = ?", user.Username).First(&existingUser).Error; err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -159,7 +156,7 @@ func Delete(c *fiber.Ctx) error{
 		})
 	}
 
-	// Verificar a senha
+	// Verify password
 	err := bcrypt.CompareHashAndPassword([]byte(existingUser.Password), []byte(user.Password))
 	if err != nil {
 	    return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

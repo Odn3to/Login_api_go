@@ -28,29 +28,20 @@ const docTemplate = `{
                 "operationId": "createUser",
                 "parameters": [
                     {
-                        "description": "Nome do usuário",
-                        "name": "username",
+                        "description": "Credenciais do usuário",
+                        "name": "User.Login",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Senha",
-                        "name": "password",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/User.Login"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "user",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/User.Login"
                         }
                     }
                 }
@@ -69,29 +60,20 @@ const docTemplate = `{
                 "operationId": "deleteUser",
                 "parameters": [
                     {
-                        "description": "Nome do usuário",
-                        "name": "username",
+                        "description": "Credenciais do usuário",
+                        "name": "User.Login",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Senha",
-                        "name": "password",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/User.Login"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "User Deletado com Sucesso!",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/User.Message"
                         }
                     }
                 }
@@ -110,29 +92,20 @@ const docTemplate = `{
                 "operationId": "logar",
                 "parameters": [
                     {
-                        "description": "Nome do usuário",
-                        "name": "username",
+                        "description": "Credenciais do usuário",
+                        "name": "userCredentials",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Senha",
-                        "name": "password",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/User.Login"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/jwt_func.Verfica"
                         }
                     }
                 }
@@ -162,11 +135,48 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ValidToken: true",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/jwt_func.RetornoVerificar"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User.Login": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "User.Message": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "jwt_func.RetornoVerificar": {
+            "type": "object",
+            "properties": {
+                "validToken": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "jwt_func.Verfica": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
                 }
             }
         }
@@ -175,12 +185,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
-	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Version:          "1.0",
+	Host:             "172.23.58.10:8006",
+	BasePath:         "/login",
+	Schemes:          []string{"http", "https"},
+	Title:            "Login - Jwt - API",
+	Description:      "Gerencia o sistema de autenticação e geração de tokens (jwt)",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

@@ -1,5 +1,33 @@
+basePath: /login
+definitions:
+  User.Login:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  User.Message:
+    properties:
+      message:
+        type: string
+    type: object
+  jwt_func.RetornoVerificar:
+    properties:
+      validToken:
+        type: boolean
+    type: object
+  jwt_func.Verfica:
+    properties:
+      token:
+        type: string
+    type: object
+host: 172.23.58.10:8006
 info:
   contact: {}
+  description: Gerencia o sistema de autenticação e geração de tokens (jwt)
+  title: Login - Jwt - API
+  version: "1.0"
 paths:
   /login/create:
     post:
@@ -8,25 +36,19 @@ paths:
       description: Pega o username e password e cria
       operationId: createUser
       parameters:
-      - description: Nome do usuário
+      - description: Credenciais do usuário
         in: body
-        name: username
+        name: User.Login
         required: true
         schema:
-          type: string
-      - description: Senha
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
+          $ref: '#/definitions/User.Login'
       produces:
       - application/json
       responses:
         "200":
-          description: user
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/User.Login'
       summary: Cria Usuário
   /login/delete:
     post:
@@ -35,25 +57,19 @@ paths:
       description: Pega o username e senha e exclui
       operationId: deleteUser
       parameters:
-      - description: Nome do usuário
+      - description: Credenciais do usuário
         in: body
-        name: username
+        name: User.Login
         required: true
         schema:
-          type: string
-      - description: Senha
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
+          $ref: '#/definitions/User.Login'
       produces:
       - application/json
       responses:
         "200":
-          description: User Deletado com Sucesso!
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/User.Message'
       summary: Deleta Usuário
   /login/token:
     post:
@@ -62,25 +78,19 @@ paths:
       description: Faz login com nome de usuário e senha
       operationId: logar
       parameters:
-      - description: Nome do usuário
+      - description: Credenciais do usuário
         in: body
-        name: username
+        name: userCredentials
         required: true
         schema:
-          type: string
-      - description: Senha
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
+          $ref: '#/definitions/User.Login'
       produces:
       - application/json
       responses:
         "200":
-          description: ok
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/jwt_func.Verfica'
       summary: Logar usuário
   /login/validador:
     post:
@@ -99,8 +109,11 @@ paths:
       - application/json
       responses:
         "200":
-          description: 'ValidToken: true'
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/jwt_func.RetornoVerificar'
       summary: Verifica Jwt Token
+schemes:
+- http
+- https
 swagger: "2.0"

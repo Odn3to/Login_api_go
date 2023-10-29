@@ -12,6 +12,12 @@ import (
 	"Login-api/database"
 )
 
+// @title Login - Jwt - API
+// @version 1.0
+// @description Gerencia o sistema de autenticação e geração de tokens (jwt)
+// @host 172.23.58.10:8006
+// @BasePath /login
+// @schemes http https
 func main() {
 
 	//carregar as variáveis de ambiente
