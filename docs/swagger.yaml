@@ -1,0 +1,106 @@
+info:
+  contact: {}
+paths:
+  /login/create:
+    post:
+      consumes:
+      - application/json
+      description: Pega o username e password e cria
+      operationId: createUser
+      parameters:
+      - description: Nome do usuário
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: Senha
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user
+          schema:
+            type: string
+      summary: Cria Usuário
+  /login/delete:
+    post:
+      consumes:
+      - application/json
+      description: Pega o username e senha e exclui
+      operationId: deleteUser
+      parameters:
+      - description: Nome do usuário
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: Senha
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User Deletado com Sucesso!
+          schema:
+            type: string
+      summary: Deleta Usuário
+  /login/token:
+    post:
+      consumes:
+      - application/json
+      description: Faz login com nome de usuário e senha
+      operationId: logar
+      parameters:
+      - description: Nome do usuário
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: Senha
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Logar usuário
+  /login/validador:
+    post:
+      consumes:
+      - application/json
+      description: Pega o token e verifica se é válido
+      operationId: verificadorJwt
+      parameters:
+      - description: Token
+        in: body
+        name: token
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'ValidToken: true'
+          schema:
+            type: string
+      summary: Verifica Jwt Token
+swagger: "2.0"
